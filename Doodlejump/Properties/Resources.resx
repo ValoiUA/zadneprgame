@@ -121,6 +121,9 @@
   <data name="coledge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\coledge-removebg-preview.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="sound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\images_sounds_BlueBoyAdventure.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="zadneprup" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\zadneprup.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
