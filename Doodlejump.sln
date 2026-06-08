@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doodlejump", "Doodlejump\Doodlejump.csproj", "{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB7C42A4-D512-4314-85D5-C3F7C05727A8}
+	EndGlobalSection
+EndGlobal

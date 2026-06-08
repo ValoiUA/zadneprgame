@@ -1,0 +1,17 @@
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\Doodlejump.exe
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\Doodlejump.deps.json
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\Doodlejump.runtimeconfig.json
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\Doodlejump.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\Doodlejump.pdb
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Form1.resources
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Properties.Resources.resources
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.GenerateResource.cache
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.AssemblyInfoInputs.cache
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.AssemblyInfo.cs
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.CoreCompileInputs.cache
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\refint\Doodlejump.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.pdb
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.genruntimeconfig.cache
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\ref\Doodlejump.dll
