@@ -26,7 +26,6 @@ namespace Doodlejump
             public bool IsCasino { get; set; }
             public bool IsJumper { get; set; }
         }
-
         List<WorldPlatform> platforms = new List<WorldPlatform>();
         Random rnd = new Random();
         int playerWorldX;
@@ -41,7 +40,7 @@ namespace Doodlejump
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
         bool isPaused = false;
-        int score = 0;
+        public int score = 0;
         Label labelScore;
         string musicPath;
         Label labelPause;
@@ -199,28 +198,74 @@ namespace Doodlejump
         {
             try
             {
-                byte[] resource = isBreakable ? Properties.Resources.breakcol : Properties.Resources.coledge;
-
-                using (MemoryStream ms = new MemoryStream(resource))
+                if (isCasino)
                 {
-                    pb.Image = Image.FromStream(ms);
+                    if (pb.Image != null)
+                    {
+                        pb.Image.Dispose();
+                        pb.Image = null;
+                    }
+                    pb.BackColor = Color.Magenta;
+                    try
+                    {
+                        using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
+                        {
+                            if (pb.Image != null) pb.Image.Dispose();
+                            pb.Image = Image.FromStream(ms);
+                        }
+                    }
+                    catch
+                    {
+                        pb.Image = null;
+                    }
+                    return;
                 }
 
                 if (isBreakable)
-                {
-                    pb.BackColor = Color.Brown;
+                { 
+                    pb.BackColor = Color.SaddleBrown;
+                    try
+                    {
+                        using (MemoryStream ms = new MemoryStream(Properties.Resources.breakcol))
+                        {
+                            if (pb.Image != null) pb.Image.Dispose();
+                            pb.Image = Image.FromStream(ms);
+                        }
+                    }
+                    catch
+                    {
+                        pb.Image = null;
+                    }
                 }
-                if (isCasino)
+                else
                 {
-                    pb.BackColor = Color.Magenta;
+                    // Звичайні платформи - зелені
+                    pb.BackColor = Color.ForestGreen;
+
+                    try
+                    {
+                        using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
+                        {
+                            if (pb.Image != null) pb.Image.Dispose();
+                            pb.Image = Image.FromStream(ms);
+                        }
+                    }
+                    catch
+                    {
+                        pb.Image = null;
+                    }
                 }
             }
             catch
             {
+                // Запасний варіант якщо все зламалось
+                pb.Image = null;
                 if (isCasino)
                     pb.BackColor = Color.Magenta;
+                else if (isBreakable)
+                    pb.BackColor = Color.SaddleBrown;
                 else
-                    pb.BackColor = isBreakable ? Color.Brown : Color.Green;
+                    pb.BackColor = Color.ForestGreen;
             }
         }
 
@@ -229,6 +274,7 @@ namespace Doodlejump
             foreach (var p in platforms) this.Controls.Remove(p.View);
             platforms.Clear();
 
+            // Стартова платформа
             WorldPlatform first = new WorldPlatform();
             first.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
             first.IsCasino = false;
@@ -240,8 +286,6 @@ namespace Doodlejump
 
             this.Controls.Add(first.View);
             platforms.Add(first);
-
-            bool wasLastBreakable = false;
             int nextY = 180;
 
             for (int i = 0; i < 12; i++)
@@ -249,29 +293,22 @@ namespace Doodlejump
                 WorldPlatform wp = new WorldPlatform();
                 wp.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
 
-                // 5% шанс, що платформа буде Казино
-                wp.IsCasino = rnd.Next(0, 20) == 0;
+                // 5% шанс на Казино
+                wp.IsCasino = rnd.Next(0, 100) < 5;
 
                 if (wp.IsCasino)
                 {
-                    wp.IsBreakable = false; // КАЗИНО НІКОЛИ НЕ ЛАМАЄТЬСЯ
-                    wasLastBreakable = false;
+                    wp.IsBreakable = false;
+                    wp.IsBroken = false;
                 }
                 else
                 {
-                    if (wasLastBreakable)
-                    {
-                        wp.IsBreakable = false;
-                    }
-                    else
-                    {
-                        wp.IsBreakable = rnd.Next(0, 10) == 0;
-                    }
-                    wasLastBreakable = wp.IsBreakable;
+                    // ВИПРАВЛЕНО: 15% шанс на ламку платформу
+                    wp.IsBreakable = rnd.Next(0, 100) < 15;
+                    wp.IsBroken = false;
                 }
 
-                wp.IsBroken = false;
-
+                // Встановлюємо візуал
                 SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino);
 
                 wp.WorldX = rnd.Next(10, this.ClientSize.Width - 90);
@@ -336,7 +373,7 @@ namespace Doodlejump
                 labelScore.Text = "Очки: " + score;
             }
 
-            // 3. Колізія
+            // 3. Колізія (Виправлена)
             if (gravity > 0)
             {
                 Rectangle playerRect = new Rectangle(
@@ -369,34 +406,39 @@ namespace Doodlejump
                             else
                             {
                                 playerWorldY = platform.WorldY - pictureBoxPlayer.Height;
-                                
+
                                 if (platform.IsCasino)
                                 {
+                                    goLeft = false;
+                                    goRight = false;
+                                    Casino cs = new Casino();
+                                    cs.Show();
+                                    gameTimer.Stop();
                                     TogglePause();
-                                    gravity = -24; // Супер-батут
+                                    gravity = -26; // Потужний стрибок після слотів
                                 }
                                 else
                                 {
                                     gravity = -jumpSpeed;
                                 }
-                            }
 
-                            break;
+                                break;
+                            }
                         }
                     }
                 }
             }
 
-            // 4. Екранне оновлення позицій
+            // 4. Екранне оновлення позицій та ДИНАМІЧНЕ ПЕРЕСТВОРЕННЯ ПЛАТФОРМ
             pictureBoxPlayer.Left = playerWorldX;
             pictureBoxPlayer.Top = playerWorldY - cameraY;
-            pictureBoxPlayer.SendToBack();
 
             foreach (var platform in platforms)
             {
                 platform.View.Left = platform.WorldX;
                 platform.View.Top = platform.WorldY - cameraY;
 
+                // Якщо платформа впала за нижній край екрану — переносимо її НАГОРУ
                 if (platform.View.Top > this.ClientSize.Height + 50)
                 {
                     int highestWorldY = this.ClientSize.Height;
@@ -411,10 +453,12 @@ namespace Doodlejump
                         }
                     }
 
+                    // Нові координати нагорі світу
                     platform.WorldX = rnd.Next(10, this.ClientSize.Width - platform.View.Width - 10);
                     platform.WorldY = highestWorldY - rnd.Next(65, 80);
 
-                    platform.IsCasino = rnd.Next(0, 20) == 0;
+                    // Рандомимо тип платформи нагорі заново
+                    platform.IsCasino = rnd.Next(0, 20) == 0; // 5% шанс на казино
 
                     if (platform.IsCasino)
                     {
@@ -435,7 +479,9 @@ namespace Doodlejump
                     platform.IsBroken = false;
                     platform.View.Visible = true;
 
+                    // 🔥 ВИПРАВЛЕНО: Тепер нові платформи зверху теж отримують правильний рожевий візуал!
                     SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino);
+
                     platform.View.BringToFront();
                 }
             }
@@ -499,8 +545,6 @@ namespace Doodlejump
             if (player != null) player.Stop();
             Application.Exit();
         }
-
-        // ЄДИНИЙ ТА ЧИСТИЙ МЕТОД ОБРОБКИ КЛАВІШ
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.P)
