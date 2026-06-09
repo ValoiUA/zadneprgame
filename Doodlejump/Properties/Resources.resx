@@ -130,4 +130,10 @@
   <data name="zandepr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\zandepr.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="breakcol" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\breakcol.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="casino" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\casino.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

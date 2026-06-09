@@ -9,12 +9,10 @@ using System.Text;
 using System.Windows.Forms;
 using NAudio.Wave;
 
-
 namespace Doodlejump
 {
     public partial class Form1 : Form
     {
-        // Системна функція для керування аудіо-рушієм Windows
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string command, StringBuilder returnString, int returnLength, IntPtr callback);
 
@@ -23,6 +21,10 @@ namespace Doodlejump
             public PictureBox View { get; set; }
             public int WorldX { get; set; }
             public int WorldY { get; set; }
+            public bool IsBreakable { get; set; }
+            public bool IsBroken { get; set; }
+            public bool IsCasino { get; set; }
+            public bool IsJumper { get; set; }
         }
 
         List<WorldPlatform> platforms = new List<WorldPlatform>();
@@ -38,11 +40,25 @@ namespace Doodlejump
         bool goRight = false;
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
-
-        // Шлях до файлу фонової музики
+        bool isPaused = false;
+        int score = 0;
+        Label labelScore;
         string musicPath;
+        Label labelPause;
+
+        // Змінна для відстеження поточного стану анімації (щоб не перезавантажувати картинку щокадру)
+        private string currentAnimation = "";
 
         System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
+
+        private void AudioFile_PlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            if (audioFile != null && outputDevice != null && FormSettings.IsSoundOn)
+            {
+                audioFile.Position = 0;
+                outputDevice.Play();
+            }
+        }
 
         public Form1()
         {
@@ -55,31 +71,49 @@ namespace Doodlejump
             this.KeyUp += Form1_KeyUp;
             this.KeyPreview = true;
 
-            // Запускаємо фонову заставку
             PrepareAndPlayBackgroundMusic();
+        }
+
+        private void TogglePause()
+        {
+            if (panelMenu.Visible) return;
+
+            isPaused = !isPaused;
+
+            if (isPaused)
+            {
+                gameTimer.Stop();
+
+                labelPause.Location = new Point(
+                    (this.ClientSize.Width - labelPause.Width) / 2,
+                    (this.ClientSize.Height - labelPause.Height) / 2
+                );
+                labelPause.Visible = true;
+                labelPause.BringToFront();
+            }
+            else
+            {
+                gameTimer.Start();
+                labelPause.Visible = false;
+            }
         }
 
         private void PrepareAndPlayBackgroundMusic()
         {
             try
             {
-                musicPath = Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "doodle_bg_music.wav");
+                musicPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "doodle_bg_music.wav");
 
                 using (Stream sourceStream = Properties.Resources.sound)
-                using (FileStream fileStream = new FileStream(
-                    musicPath,
-                    FileMode.Create,
-                    FileAccess.Write))
+                using (FileStream fileStream = new FileStream(musicPath, FileMode.Create, FileAccess.Write))
                 {
                     sourceStream.CopyTo(fileStream);
                 }
 
                 audioFile = new AudioFileReader(musicPath);
-
                 outputDevice = new WaveOutEvent();
                 outputDevice.Init(audioFile);
+                outputDevice.PlaybackStopped += AudioFile_PlaybackStopped;
 
                 audioFile.Volume = FormSettings.Volume / 100f;
 
@@ -91,12 +125,10 @@ namespace Doodlejump
                 MessageBox.Show(ex.Message);
             }
         }
-        private static extern int GetShortPathName(string lpszLongPath, StringBuilder lpszShortPath, int cchBuffer);
 
         private void UpdateVolume()
         {
-            if (audioFile == null)
-                return;
+            if (audioFile == null || outputDevice == null) return;
 
             if (!FormSettings.IsSoundOn)
             {
@@ -105,6 +137,11 @@ namespace Doodlejump
             }
 
             audioFile.Volume = FormSettings.Volume / 100f;
+
+            if (outputDevice.PlaybackState != PlaybackState.Playing)
+            {
+                outputDevice.Play();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -116,13 +153,34 @@ namespace Doodlejump
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
+            labelScore = new Label();
+            labelScore.Text = "Очки: 0";
+            labelScore.Font = new Font("Arial", 16, FontStyle.Bold);
+            labelScore.ForeColor = Color.Black;
+            labelScore.BackColor = Color.Transparent;
+            labelScore.AutoSize = true;
+            labelScore.Location = new Point(10, 10);
+            this.Controls.Add(labelScore);
+
+            labelPause = new Label();
+            labelPause.Text = "ПАУЗА\n[Натисніть P для продовження]";
+            labelPause.Font = new Font("Arial", 22, FontStyle.Bold);
+            labelPause.ForeColor = Color.Red;
+            labelPause.BackColor = Color.Transparent;
+            labelPause.TextAlign = ContentAlignment.MiddleCenter;
+            labelPause.AutoSize = true;
+            labelPause.Visible = false;
+            this.Controls.Add(labelPause);
+
             ShowMainMenu();
         }
 
         private void ShowMainMenu()
         {
             gameTimer.Stop();
-
+            isPaused = false;
+            if (labelScore != null) labelScore.Visible = false;
+            if (labelPause != null) labelPause.Visible = false;
             foreach (var p in platforms)
             {
                 this.Controls.Remove(p.View);
@@ -133,9 +191,37 @@ namespace Doodlejump
             if (pictureBoxPlayer != null) pictureBoxPlayer.Visible = false;
 
             this.Refresh();
-
             panelMenu.Visible = true;
             panelMenu.BringToFront();
+        }
+
+        private void SetPlatformResource(PictureBox pb, bool isBreakable, bool isCasino)
+        {
+            try
+            {
+                byte[] resource = isBreakable ? Properties.Resources.breakcol : Properties.Resources.coledge;
+
+                using (MemoryStream ms = new MemoryStream(resource))
+                {
+                    pb.Image = Image.FromStream(ms);
+                }
+
+                if (isBreakable)
+                {
+                    pb.BackColor = Color.Brown;
+                }
+                if (isCasino)
+                {
+                    pb.BackColor = Color.Magenta;
+                }
+            }
+            catch
+            {
+                if (isCasino)
+                    pb.BackColor = Color.Magenta;
+                else
+                    pb.BackColor = isBreakable ? Color.Brown : Color.Green;
+            }
         }
 
         private void GeneratePlatforms()
@@ -145,24 +231,51 @@ namespace Doodlejump
 
             WorldPlatform first = new WorldPlatform();
             first.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
-            SetPlatformResource(first.View);
-
+            first.IsCasino = false;
+            first.IsBreakable = false;
+            first.IsBroken = false;
+            SetPlatformResource(first.View, false, false);
             first.WorldX = this.ClientSize.Width / 2 - 40;
             first.WorldY = 100;
 
             this.Controls.Add(first.View);
             platforms.Add(first);
 
+            bool wasLastBreakable = false;
             int nextY = 180;
+
             for (int i = 0; i < 12; i++)
             {
                 WorldPlatform wp = new WorldPlatform();
                 wp.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
-                SetPlatformResource(wp.View);
+
+                // 5% шанс, що платформа буде Казино
+                wp.IsCasino = rnd.Next(0, 20) == 0;
+
+                if (wp.IsCasino)
+                {
+                    wp.IsBreakable = false; // КАЗИНО НІКОЛИ НЕ ЛАМАЄТЬСЯ
+                    wasLastBreakable = false;
+                }
+                else
+                {
+                    if (wasLastBreakable)
+                    {
+                        wp.IsBreakable = false;
+                    }
+                    else
+                    {
+                        wp.IsBreakable = rnd.Next(0, 10) == 0;
+                    }
+                    wasLastBreakable = wp.IsBreakable;
+                }
+
+                wp.IsBroken = false;
+
+                SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino);
 
                 wp.WorldX = rnd.Next(10, this.ClientSize.Width - 90);
                 wp.WorldY = nextY;
-
                 nextY += rnd.Next(65, 80);
 
                 this.Controls.Add(wp.View);
@@ -171,41 +284,25 @@ namespace Doodlejump
             }
         }
 
-        private void SetPlatformResource(PictureBox pb)
+        private void SetPlayerResource(PictureBox pb, byte[] resourceFile, string animName)
         {
+            if (currentAnimation == animName) return;
+            currentAnimation = animName;
+
             try
             {
-                using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
-                {
-                    pb.Image = Image.FromStream(ms);
-                }
-            }
-            catch { pb.BackColor = Color.Green; }
-        }
-
-        private void SetPlayerResource(PictureBox pb, byte[] resourceFile)
-        {
-            try
-            {
-                int currentWidth = pb.Width;
-                int currentHeight = pb.Height;
-
                 using (MemoryStream ms = new MemoryStream(resourceFile))
                 {
                     if (pb.Image != null) pb.Image.Dispose();
                     pb.Image = Image.FromStream(ms);
                 }
-
-                pb.SizeMode = PictureBoxSizeMode.Zoom;
-                pb.Width = currentWidth;
-                pb.Height = currentHeight;
             }
             catch { pb.BackColor = Color.Red; }
         }
 
         private void GameTimerEvent(object sender, EventArgs e)
         {
-            if (panelMenu.Visible) return;
+            if (panelMenu.Visible || isPaused) return;
 
             // 1. Рух гравця у світі
             playerWorldY += gravity;
@@ -213,16 +310,15 @@ namespace Doodlejump
 
             if (gravity < 0)
             {
-                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zadneprup);
+                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zadneprup, "up");
             }
             else
             {
-                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zandepr);
+                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zandepr, "down");
             }
 
             if (gravity > 12) gravity = 12;
 
-            // Керування по Х
             if (goLeft) playerWorldX -= playerSpeed;
             if (goRight) playerWorldX += playerSpeed;
 
@@ -233,18 +329,58 @@ namespace Doodlejump
             int targetCameraY = playerWorldY - (this.ClientSize.Height / 2);
             if (targetCameraY < cameraY) cameraY += (targetCameraY - cameraY) / 4;
 
+            int currentProgress = -cameraY / 10;
+            if (currentProgress > score)
+            {
+                score = currentProgress;
+                labelScore.Text = "Очки: " + score;
+            }
+
             // 3. Колізія
             if (gravity > 0)
             {
+                Rectangle playerRect = new Rectangle(
+                    playerWorldX,
+                    playerWorldY,
+                    pictureBoxPlayer.Width,
+                    pictureBoxPlayer.Height);
+
                 foreach (var platform in platforms)
                 {
-                    if (playerWorldX + pictureBoxPlayer.Width >= platform.WorldX && playerWorldX <= platform.WorldX + platform.View.Width)
+                    if (platform.IsBroken)
+                        continue;
+
+                    Rectangle platformRect = new Rectangle(
+                        platform.WorldX,
+                        platform.WorldY,
+                        platform.View.Width,
+                        platform.View.Height);
+
+                    if (playerRect.IntersectsWith(platformRect))
                     {
-                        if (playerWorldY + pictureBoxPlayer.Height >= platform.WorldY &&
-                            playerWorldY + pictureBoxPlayer.Height <= platform.WorldY + gravity + 2)
+                        if (playerWorldY + pictureBoxPlayer.Height - gravity <= platform.WorldY)
                         {
-                            playerWorldY = platform.WorldY - pictureBoxPlayer.Height;
-                            gravity = -jumpSpeed;
+                            if (platform.IsBreakable)
+                            {
+                                platform.IsBroken = true;
+                                platform.View.Visible = false;
+                                gravity = 5;
+                            }
+                            else
+                            {
+                                playerWorldY = platform.WorldY - pictureBoxPlayer.Height;
+                                
+                                if (platform.IsCasino)
+                                {
+                                    TogglePause();
+                                    gravity = -24; // Супер-батут
+                                }
+                                else
+                                {
+                                    gravity = -jumpSpeed;
+                                }
+                            }
+
                             break;
                         }
                     }
@@ -254,6 +390,7 @@ namespace Doodlejump
             // 4. Екранне оновлення позицій
             pictureBoxPlayer.Left = playerWorldX;
             pictureBoxPlayer.Top = playerWorldY - cameraY;
+            pictureBoxPlayer.SendToBack();
 
             foreach (var platform in platforms)
             {
@@ -263,32 +400,76 @@ namespace Doodlejump
                 if (platform.View.Top > this.ClientSize.Height + 50)
                 {
                     int highestWorldY = this.ClientSize.Height;
+                    WorldPlatform highestPlatform = null;
+
                     foreach (var p in platforms)
                     {
-                        if (p.WorldY < highestWorldY) highestWorldY = p.WorldY;
+                        if (p.WorldY < highestWorldY)
+                        {
+                            highestWorldY = p.WorldY;
+                            highestPlatform = p;
+                        }
                     }
+
                     platform.WorldX = rnd.Next(10, this.ClientSize.Width - platform.View.Width - 10);
                     platform.WorldY = highestWorldY - rnd.Next(65, 80);
+
+                    platform.IsCasino = rnd.Next(0, 20) == 0;
+
+                    if (platform.IsCasino)
+                    {
+                        platform.IsBreakable = false;
+                    }
+                    else
+                    {
+                        if (highestPlatform != null && highestPlatform.IsBreakable)
+                        {
+                            platform.IsBreakable = false;
+                        }
+                        else
+                        {
+                            platform.IsBreakable = rnd.Next(0, 10) == 0;
+                        }
+                    }
+
+                    platform.IsBroken = false;
+                    platform.View.Visible = true;
+
+                    SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino);
+                    platform.View.BringToFront();
                 }
             }
+
+            if (labelScore != null) labelScore.BringToFront();
 
             // 5. Програш
             if (pictureBoxPlayer.Top > this.ClientSize.Height)
             {
                 gameTimer.Stop();
                 this.Refresh();
-                MessageBox.Show("Ти впав!");
+                MessageBox.Show($"Ти впав!\nТвій результат: {score} очків.");
                 ShowMainMenu();
             }
         }
 
         private void ResetGame()
         {
+            score = 0;
+            isPaused = false;
+            currentAnimation = "";
+            if (labelScore != null)
+            {
+                labelScore.Text = "Очки: 0";
+                labelScore.Visible = true;
+            }
+            if (labelPause != null) labelPause.Visible = false;
+
             cameraY = 0;
             GeneratePlatforms();
 
             pictureBoxPlayer.Visible = true;
-            pictureBoxPlayer.BringToFront();
+            pictureBoxPlayer.SendToBack();
+            if (labelScore != null) labelScore.BringToFront();
 
             playerWorldX = this.ClientSize.Width / 2 - pictureBoxPlayer.Width / 2;
             playerWorldY = 30;
@@ -300,7 +481,6 @@ namespace Doodlejump
             gameTimer.Start();
         }
 
-        // --- КНОПКИ ГОЛОВНОГО МЕНЮ ---
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             panelMenu.Visible = false;
@@ -311,23 +491,25 @@ namespace Doodlejump
         {
             FormSettings settingsForm = new FormSettings();
             settingsForm.ShowDialog();
-
             UpdateVolume();
         }
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
-            if (player != null)
-            {
-                player.Stop();
-            }
+            if (player != null) player.Stop();
             Application.Exit();
         }
 
-        // --- КЕРУВАННЯ ---
+        // ЄДИНИЙ ТА ЧИСТИЙ МЕТОД ОБРОБКИ КЛАВІШ
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (panelMenu.Visible) return;
+            if (e.KeyCode == Keys.P)
+            {
+                TogglePause();
+                return;
+            }
+
+            if (panelMenu.Visible || isPaused) return;
 
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A) goLeft = true;
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D) goRight = true;
@@ -335,6 +517,8 @@ namespace Doodlejump
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
+            if (isPaused) return;
+
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A) goLeft = false;
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D) goRight = false;
         }

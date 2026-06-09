@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|c:\\users\\pc\\desktop\\vlad\\praktika\\doodlejump\\doodlejump\\doodlejump.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\doodlejump.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|c:\\users\\pc\\desktop\\vlad\\praktika\\doodlejump\\doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|c:\\users\\pc\\desktop\\vlad\\praktika\\doodlejump\\doodlejump\\doodlejump.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\doodlejump.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
               "ToolTip": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Form1.cs",
               "RelativeToolTip": "Doodlejump\\Form1.cs",
-              "ViewState": "AgIAAIYAAAAAAAAAAAAiwJkAAABRAAAAAAAAAA==",
+              "ViewState": "AgIAAGMBAAAAAAAAAADwv20BAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-08T06:32:43.367Z",
               "EditorCaption": ""
@@ -48,18 +48,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
-              "DocumentMoniker": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Form1.cs",
-              "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
-              "ToolTip": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
-              "RelativeToolTip": "Doodlejump\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-08T06:12:48.403Z",
-              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Doodlejump",
               "DocumentMoniker": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Doodlejump.csproj",
               "RelativeDocumentMoniker": "Doodlejump\\Doodlejump.csproj",
@@ -68,6 +56,18 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-06-08T06:29:33.871Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
+              "DocumentMoniker": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Form1.cs",
+              "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
+              "ToolTip": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
+              "RelativeToolTip": "Doodlejump\\Form1.cs [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T06:12:48.403Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435]"
             }
           ]
         }

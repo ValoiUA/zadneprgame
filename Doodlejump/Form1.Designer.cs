@@ -43,29 +43,28 @@
             // pictureBoxPlayer
             // 
             pictureBoxPlayer.Image = (Image)resources.GetObject("pictureBoxPlayer.Image");
-            pictureBoxPlayer.Location = new Point(236, 241);
-            pictureBoxPlayer.Margin = new Padding(2);
+            pictureBoxPlayer.Location = new Point(337, 402);
             pictureBoxPlayer.Name = "pictureBoxPlayer";
-            pictureBoxPlayer.Size = new Size(83, 145);
+            pictureBoxPlayer.Size = new Size(119, 242);
             pictureBoxPlayer.TabIndex = 0;
             pictureBoxPlayer.TabStop = false;
             // 
             // pictureBoxPlatform
             // 
             pictureBoxPlatform.Image = (Image)resources.GetObject("pictureBoxPlatform.Image");
-            pictureBoxPlatform.Location = new Point(466, 11);
-            pictureBoxPlatform.Margin = new Padding(2);
+            pictureBoxPlatform.Location = new Point(666, 18);
             pictureBoxPlatform.Name = "pictureBoxPlatform";
-            pictureBoxPlatform.Size = new Size(105, 45);
+            pictureBoxPlatform.Size = new Size(150, 75);
             pictureBoxPlatform.TabIndex = 1;
             pictureBoxPlatform.TabStop = false;
             pictureBoxPlatform.Visible = false;
             // 
             // buttonPlay
             // 
-            buttonPlay.Location = new Point(45, 20);
+            buttonPlay.Location = new Point(64, 33);
+            buttonPlay.Margin = new Padding(4, 5, 4, 5);
             buttonPlay.Name = "buttonPlay";
-            buttonPlay.Size = new Size(106, 41);
+            buttonPlay.Size = new Size(151, 68);
             buttonPlay.TabIndex = 2;
             buttonPlay.Text = "Play";
             buttonPlay.UseVisualStyleBackColor = true;
@@ -73,9 +72,10 @@
             // 
             // buttonSettings
             // 
-            buttonSettings.Location = new Point(45, 67);
+            buttonSettings.Location = new Point(64, 112);
+            buttonSettings.Margin = new Padding(4, 5, 4, 5);
             buttonSettings.Name = "buttonSettings";
-            buttonSettings.Size = new Size(106, 41);
+            buttonSettings.Size = new Size(151, 68);
             buttonSettings.TabIndex = 3;
             buttonSettings.Text = "Setting";
             buttonSettings.UseVisualStyleBackColor = true;
@@ -83,9 +83,10 @@
             // 
             // buttonExit
             // 
-            buttonExit.Location = new Point(45, 114);
+            buttonExit.Location = new Point(64, 190);
+            buttonExit.Margin = new Padding(4, 5, 4, 5);
             buttonExit.Name = "buttonExit";
-            buttonExit.Size = new Size(106, 41);
+            buttonExit.Size = new Size(151, 68);
             buttonExit.TabIndex = 4;
             buttonExit.Text = "Exit";
             buttonExit.UseVisualStyleBackColor = true;
@@ -96,20 +97,20 @@
             panelMenu.Controls.Add(buttonPlay);
             panelMenu.Controls.Add(buttonExit);
             panelMenu.Controls.Add(buttonSettings);
-            panelMenu.Location = new Point(176, 12);
+            panelMenu.Location = new Point(251, 20);
+            panelMenu.Margin = new Padding(4, 5, 4, 5);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(200, 201);
+            panelMenu.Size = new Size(286, 335);
             panelMenu.TabIndex = 5;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(582, 384);
+            ClientSize = new Size(831, 640);
             Controls.Add(panelMenu);
             Controls.Add(pictureBoxPlatform);
             Controls.Add(pictureBoxPlayer);
-            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;

@@ -43,3 +43,14 @@ E:\zadneprgame\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinForms.dll
 E:\zadneprgame\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinMM.dll
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.AssemblyReference.cache
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.Up2Date
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.Asio.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.Core.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.Midi.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.Wasapi.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinForms.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinMM.dll
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.AssemblyReference.cache
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.FormSettings.resources
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.sourcelink.json
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.Up2Date
