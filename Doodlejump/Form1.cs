@@ -25,6 +25,7 @@ namespace Doodlejump
             public bool IsCasino { get; set; }
             public bool IsJumper { get; set; }
             public bool IsMovable { get; set; }
+            public int Direction { get; set; } = 1; 
         }
         List<WorldPlatform> platforms = new List<WorldPlatform>();
         Random rnd = new Random();
@@ -45,7 +46,7 @@ namespace Doodlejump
         string musicPath;
         Label labelPause;
         int scoreOffset = 0;
-        const int platformSpeed = 8;
+        int platformSpeed = 6;
 
         // Змінна для відстеження поточного стану анімації (щоб не перезавантажувати картинку щокадру)
         private string currentAnimation = "";
@@ -196,7 +197,7 @@ namespace Doodlejump
             panelMenu.BringToFront();
         }
 
-        private void SetPlatformResource(PictureBox pb, bool isBreakable, bool isCasino, bool isJumper)
+        private void SetPlatformResource(PictureBox pb, bool isBreakable, bool isCasino, bool isJumper, bool isMovable)
         {
             try
             {
@@ -222,7 +223,28 @@ namespace Doodlejump
                     }
                     return;
                 }
+                if (isMovable)
+                {
+                    if(pb.Image != null)
+                    {
+                        pb.Image.Dispose();
+                        pb.Image = null;
+                    }
 
+                    pb.BackColor = Color.OrangeRed;
+                    try
+                    {
+                        using (MemoryStream mns = new MemoryStream(Properties.Resources.coledge))
+                        {
+                            if (pb.Image != null) pb.Image.Dispose();
+                            pb.Image = Image.FromStream(mns);
+                        }
+                    }
+                    catch
+                    {
+                        pb.Image = null;
+                    }
+                }
 
                 if (isJumper)
                 {
@@ -309,7 +331,8 @@ namespace Doodlejump
             first.IsBreakable = false;
             first.IsBroken = false;
             first.IsJumper = false;
-            SetPlatformResource(first.View, false, false, false);
+            first.IsMovable = false;
+            SetPlatformResource(first.View, false, false, false, false);
             first.WorldX = this.ClientSize.Width / 2 - 40;
             first.WorldY = 100;
 
@@ -324,7 +347,8 @@ namespace Doodlejump
 
                 // 5% шанс на Казино
                 wp.IsCasino = rnd.Next(0, 100) < 5;
-                wp.IsJumper = rnd.Next(0, 100) < 10 && !wp.IsCasino; 
+                wp.IsJumper = rnd.Next(0, 100) < 10 && !wp.IsCasino;
+                wp.IsMovable = rnd.Next(0, 100) < 20 && !wp.IsCasino && !wp.IsJumper;
 
                 if (wp.IsCasino)
                 {
@@ -333,8 +357,12 @@ namespace Doodlejump
                 }
                 else if (wp.IsJumper)
                 {
+                    wp.IsBreakable = false;
                     wp.IsBroken = false;
-                    wp.IsBroken = false;
+                }
+                else if(wp.IsMovable)
+                {
+                    wp.Direction = rnd.Next(0, 2) == 0 ? -1 : 1;
                 }
                 else
                 {
@@ -344,7 +372,7 @@ namespace Doodlejump
                 }
 
                 // Встановлюємо візуал
-                SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino, wp.IsJumper);
+                SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino, wp.IsJumper, wp.IsMovable);
 
                 wp.WorldX = rnd.Next(10, this.ClientSize.Width - 90);
                 wp.WorldY = nextY;
@@ -483,6 +511,22 @@ namespace Doodlejump
 
             foreach (var platform in platforms)
             {
+                if (platform.IsMovable && !platform.IsBroken)
+                {
+                    platform.WorldX += platformSpeed * platform.Direction;
+
+                    // Відскок від лівої та правої стінок форми
+                    if (platform.WorldX <= 0)
+                    {
+                        platform.WorldX = 0;
+                        platform.Direction = 1;
+                    }
+                    else if (platform.WorldX + platform.View.Width >= this.ClientSize.Width)
+                    {
+                        platform.WorldX = this.ClientSize.Width - platform.View.Width;
+                        platform.Direction = -1;
+                    }
+                }
                 platform.View.Left = platform.WorldX;
                 platform.View.Top = platform.WorldY - cameraY;
 
@@ -502,29 +546,36 @@ namespace Doodlejump
 
                     platform.WorldX = rnd.Next(10, this.ClientSize.Width - platform.View.Width - 10);
                     platform.WorldY = highestWorldY - rnd.Next(65, 80);
-                    platform.IsCasino = rnd.Next(0, 20) == 0 && !platform.IsJumper && !platform.IsBreakable;
-                    platform.IsJumper = rnd.Next(0, 100) < 2 && !platform.IsCasino && !platform.IsBreakable;
 
-                    if (platform.IsCasino)
+                    // Повне скидання старих типів перед новим роллом
+                    platform.IsCasino = false;
+                    platform.IsJumper = false;
+                    platform.IsMovable = false;
+                    platform.IsBreakable = false;
+                    int roll = rnd.Next(0, 100);
+                    if (roll < 5)
                     {
-                        platform.IsBreakable = false;
+                        platform.IsCasino = true;
+                    }
+                    else if (roll < 12)
+                    {
+                        platform.IsJumper = true;
+                    }
+                    else if (roll < 30) // 18% шанс, що платформа буде рухомою
+                    {
+                        platform.IsMovable = true;
+                        platform.Direction = rnd.Next(0, 2) == 0 ? 1 : -1;
                     }
                     else
                     {
-                        if (highestPlatform != null && highestPlatform.IsBreakable)
-                        {
-                            platform.IsBreakable = false;
-                        }
-                        else
-                        {
-                            platform.IsBreakable = rnd.Next(0, 10) == 0 && !platform.IsCasino && !platform.IsJumper;
-                        }
+                        if (highestPlatform != null && highestPlatform.IsBreakable) platform.IsBreakable = false;
+                        else platform.IsBreakable = rnd.Next(0, 100) < 15;
                     }
 
                     platform.IsBroken = false;
                     platform.View.Visible = true;
 
-                    SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino, platform.IsJumper);
+                    SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino, platform.IsJumper, platform.IsMovable);
                     platform.View.BringToFront();
                 }
             }

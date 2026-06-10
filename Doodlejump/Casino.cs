@@ -125,7 +125,7 @@ namespace Doodlejump
                 pictureBox8.Image = images[newIdx[7]];
                 pictureBox9.Image = images[newIdx[8]];
                 this.Refresh();
-                await Task.Delay(i * 8);
+                await Task.Delay(150);
             }
 
             int bet = 10;

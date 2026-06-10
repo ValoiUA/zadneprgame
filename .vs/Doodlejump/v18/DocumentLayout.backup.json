@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "E:\\zadneprgame\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|e:\\zadneprgame\\doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|E:\\zadneprgame\\doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|e:\\zadneprgame\\doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|e:\\zadneprgame\\doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|E:\\zadneprgame\\doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|E:\\zadneprgame\\doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|solutionrelative:doodlejump\\casino.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FA1067DD-4204-4B0E-9FD2-9EDB518F239D}|Doodlejump\\Doodlejump.csproj|e:\\zadneprgame\\doodlejump\\properties\\resources.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
@@ -45,6 +45,19 @@
           "SelectedChildIndex": 3,
           "Children": [
             {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Casino.cs",
+              "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Casino.cs",
+              "RelativeDocumentMoniker": "Doodlejump\\Casino.cs",
+              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Casino.cs",
+              "RelativeToolTip": "Doodlejump\\Casino.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAAAmwHsAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-09T16:24:02.087Z",
+              "EditorCaption": ""
+            },
+            {
               "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
@@ -57,46 +70,42 @@
               "ToolTip": "E:\\zadneprgame\\Doodlejump\\Doodlejump.csproj",
               "RelativeToolTip": "Doodlejump\\Doodlejump.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-06-10T19:30:54.142Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-10T19:30:54.142Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
               "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Form1.cs",
               "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
-              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Form1.cs",
-              "RelativeToolTip": "Doodlejump\\Form1.cs",
-              "ViewState": "AgIAAH4AAAAAAAAAAAD4v5IAAAAJAAAAAAAAAA==",
+              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Form1.cs*",
+              "RelativeToolTip": "Doodlejump\\Form1.cs*",
+              "ViewState": "AgIAABgCAAAAAAAAAAAAACcCAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-08T18:48:02.298Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Casino.cs",
-              "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Casino.cs",
-              "RelativeDocumentMoniker": "Doodlejump\\Casino.cs",
-              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Casino.cs",
-              "RelativeToolTip": "Doodlejump\\Casino.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAawH0AAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-09T16:24:02.087Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Casino.cs [Design]",
               "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Casino.cs",
               "RelativeDocumentMoniker": "Doodlejump\\Casino.cs",
               "ToolTip": "E:\\zadneprgame\\Doodlejump\\Casino.cs [Design]",
               "RelativeToolTip": "Doodlejump\\Casino.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-09T16:20:42.311Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-06-09T16:20:42.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Form1.cs",
+              "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
+              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Form1.cs [Design]",
+              "RelativeToolTip": "Doodlejump\\Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T18:57:47.11Z"
             },
             {
               "$type": "Document",
@@ -107,8 +116,7 @@
               "ToolTip": "E:\\zadneprgame\\Doodlejump\\Properties\\Resources.resx",
               "RelativeToolTip": "Doodlejump\\Properties\\Resources.resx",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-06-08T19:22:17.599Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-08T19:22:17.599Z"
             },
             {
               "$type": "Document",
@@ -133,18 +141,6 @@
               "RelativeToolTip": "Doodlejump\\FormSettings.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-08T19:27:51.586Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "E:\\zadneprgame\\Doodlejump\\Form1.cs",
-              "RelativeDocumentMoniker": "Doodlejump\\Form1.cs",
-              "ToolTip": "E:\\zadneprgame\\Doodlejump\\Form1.cs [Design]",
-              "RelativeToolTip": "Doodlejump\\Form1.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-08T18:57:47.11Z",
-              "EditorCaption": " [Design]"
             }
           ]
         }
