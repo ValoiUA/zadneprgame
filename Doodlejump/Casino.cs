@@ -20,6 +20,7 @@ namespace Doodlejump
         int currentFrame = 0;
         public int score = 0;
         bool isAnimating = false;
+        bool isMine = false;
         public int CurrentScore { get; private set; }
         public Casino(int scores)
         {
@@ -96,7 +97,7 @@ namespace Doodlejump
 
         private async void timerAnimation_Tick(object sender, EventArgs e)
         {
-            isAnimating = true; // Фіксуємо, що анімація почалася
+            isAnimating = true; 
             int[] lastIdx = new int[9];
 
             for (int i = 0; i < 7; i++)
@@ -124,7 +125,7 @@ namespace Doodlejump
                 pictureBox8.Image = images[newIdx[7]];
                 pictureBox9.Image = images[newIdx[8]];
                 this.Refresh();
-                await Task.Delay(150);
+                await Task.Delay(i * 8);
             }
 
             int bet = 10;
@@ -233,6 +234,12 @@ namespace Doodlejump
                 isAnimating = false;
                 CheckGameOver();
             }
+            if (score == 0)
+            {
+                isMine = true;
+                MessageBox.Show("Ludic");
+                this.Close();
+            }
         }
 
         private void pictureBox5_Click(object sender, EventArgs e)
@@ -243,6 +250,27 @@ namespace Doodlejump
         {
             if (textBox1.Text.Length == 0) {
                 MessageBox.Show("Input bet");
+                return;
+            }
+            if (int.TryParse(textBox1.Text, out int bet))
+            {
+                if (bet <= 0)
+                {
+                    MessageBox.Show("Bet must be positive!");
+                    return;
+                }
+                if (bet > score)
+                {
+                    MessageBox.Show("Not enough score for this bet!");
+                    return;
+                }
+
+                score -= bet;
+                labelScore.Text = $"Score {score}";
+            }
+            else
+            {
+                MessageBox.Show("Invalid bet amount!");
                 return;
             }
             if (isAnimating) return;
@@ -257,13 +285,22 @@ namespace Doodlejump
             {
                 CheckGameOver();
                 MessageBox.Show("No more spins left!");
-                this.Close();
             }
         }
 
         private void Casino_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (isMine) return;
+            DialogResult result = MessageBox.Show("Are you sure you want to leave the casino?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if(result == DialogResult.Yes) {
+                CurrentScore = this.score; ;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
+
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -346,6 +383,7 @@ namespace Doodlejump
         {
             if (spins <= 0 && !isAnimating)
             {
+                isMine = true;
                 CurrentScore = this.score;  
                 MessageBox.Show("No more spins left!");
                 this.Close();
