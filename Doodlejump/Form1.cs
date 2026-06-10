@@ -13,8 +13,7 @@ namespace Doodlejump
 {
     public partial class Form1 : Form
     {
-        [DllImport("winmm.dll")]
-        private static extern long mciSendString(string command, StringBuilder returnString, int returnLength, IntPtr callback);
+        [DllImport("winmm.dll")] private static extern long mciSendString(string command, StringBuilder returnString, int returnLength, IntPtr callback);
 
         public class WorldPlatform
         {
@@ -222,7 +221,7 @@ namespace Doodlejump
                 }
 
                 if (isBreakable)
-                { 
+                {
                     pb.BackColor = Color.SaddleBrown;
                     try
                     {
@@ -409,13 +408,22 @@ namespace Doodlejump
 
                                 if (platform.IsCasino)
                                 {
+                                    // 1. Зупиняємо рух гравця
                                     goLeft = false;
                                     goRight = false;
-                                    Casino cs = new Casino();
-                                    cs.Show();
+                                    gravity = 0;
+
+                                    // 2. Зупиняємо ігровий таймер, щоб світ не рухався
                                     gameTimer.Stop();
-                                    TogglePause();
-                                    gravity = -26; // Потужний стрибок після слотів
+
+                                    // 3. Створюємо і відкриваємо казино як МОДАЛЬНЕ вікно
+                                    Casino cs = new Casino(score);
+                                    cs.ShowDialog(); // ТЕПЕР код застигне тут, поки гравець не закриє казино
+                                    this.score = cs.CurrentScore;
+                                    labelScore.Text = "Очки: " + score;
+                                    gravity = -26;
+                                    labelScore.Text = score.ToString();
+                                    gameTimer.Start();
                                 }
                                 else
                                 {

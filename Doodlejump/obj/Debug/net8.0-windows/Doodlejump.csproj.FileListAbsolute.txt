@@ -55,3 +55,4 @@ C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows
 C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.sourcelink.json
 C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.Up2Date
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Casino.resources
+C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Casino.resources
