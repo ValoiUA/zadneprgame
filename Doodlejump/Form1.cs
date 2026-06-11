@@ -47,6 +47,7 @@ namespace Doodlejump
         Label labelPause;
         int scoreOffset = 0;
         int platformSpeed = 6;
+        List<Image> images = new List<Image>();
 
         // Змінна для відстеження поточного стану анімації (щоб не перезавантажувати картинку щокадру)
         private string currentAnimation = "";

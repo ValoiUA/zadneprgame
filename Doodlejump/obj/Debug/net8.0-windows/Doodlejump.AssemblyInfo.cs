@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Doodlejump")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d77d0ad92e5d82f6dc5a2a818f79c0c1e4bf8688")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4d95e8ade082d3e15afb6be40c4e566ffa3e487")]
 [assembly: System.Reflection.AssemblyProductAttribute("Doodlejump")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Doodlejump")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
