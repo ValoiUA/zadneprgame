@@ -149,8 +149,6 @@ namespace Doodlejump
             Image i9 = pictureBox9.Image;
 
             bool won = false;
-
-            // 1. ПЕРЕВІРКА НА ФУЛ ПОЛЕ (всі 9 однакові)
             if (i1 != null && i1 == i2 && i2 == i3 && i3 == i4 && i4 == i5 && i5 == i6 && i6 == i7 && i7 == i8 && i8 == i9)
             {
                 score += bet * 50;
