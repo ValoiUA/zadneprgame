@@ -5,6 +5,7 @@ using System.IO;
 using System.Media;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
 using NAudio.Wave;
@@ -25,8 +26,10 @@ namespace Doodlejump
             public bool IsCasino { get; set; }
             public bool IsJumper { get; set; }
             public bool IsMovable { get; set; }
-            public int Direction { get; set; } = 1; 
+            public int Direction { get; set; } = 1;
+            public bool isMonster { get; set; }
         }
+
         List<WorldPlatform> platforms = new List<WorldPlatform>();
         Random rnd = new Random();
         int playerWorldX;
@@ -38,6 +41,7 @@ namespace Doodlejump
         bool goLeft = false;
         private SoundPlayer player;
         bool goRight = false;
+        bool isDead = false;
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
         bool isPaused = false;
@@ -48,9 +52,14 @@ namespace Doodlejump
         int scoreOffset = 0;
         int platformSpeed = 6;
         List<Image> images = new List<Image>();
-
-        // Змінна для відстеження поточного стану анімації (щоб не перезавантажувати картинку щокадру)
+        private Image up, down;
+        int MonsterSpeed = 4;
         private string currentAnimation = "";
+        private Image normalPlatformImg;
+        private Image breakPlatformImg;
+        private Image playerUpImg;
+        private Image playerDownImg;
+        private Image Monster;
 
         System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
 
@@ -153,6 +162,11 @@ namespace Doodlejump
             this.DoubleBuffered = true;
             pictureBoxPlayer.SizeMode = PictureBoxSizeMode.Zoom;
 
+            normalPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.coledge));
+            breakPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.breakcol));
+            playerUpImg = Image.FromStream(new MemoryStream(Properties.Resources.zadneprup));
+            playerDownImg = Image.FromStream(new MemoryStream(Properties.Resources.zandepr));
+            Monster = Image.FromStream(new MemoryStream(Properties.Resources.solomko));
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
@@ -198,125 +212,53 @@ namespace Doodlejump
             panelMenu.BringToFront();
         }
 
-        private void SetPlatformResource(PictureBox pb, bool isBreakable, bool isCasino, bool isJumper, bool isMovable)
+        private void SetPlatformResource(PictureBox pb, bool isBreakable, bool isCasino, bool isJumper, bool isMovable, bool isMonster)
         {
             try
             {
+                if (isMonster)
+                {
+                    pb.BackColor = Color.Transparent; // Робимо фон прозорим, щоб бачити лише монстра
+                    pb.Image = Monster;
+                    return;
+                }
                 if (isCasino)
                 {
-                    if (pb.Image != null)
-                    {
-                        pb.Image.Dispose();
-                        pb.Image = null;
-                    }
                     pb.BackColor = Color.Magenta;
-                    try
-                    {
-                        using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
-                        {
-                            if (pb.Image != null) pb.Image.Dispose();
-                            pb.Image = Image.FromStream(ms);
-                        }
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
+                    pb.Image = normalPlatformImg;
                     return;
                 }
                 if (isMovable)
                 {
-                    if(pb.Image != null)
-                    {
-                        pb.Image.Dispose();
-                        pb.Image = null;
-                    }
-
                     pb.BackColor = Color.OrangeRed;
-                    try
-                    {
-                        using (MemoryStream mns = new MemoryStream(Properties.Resources.coledge))
-                        {
-                            if (pb.Image != null) pb.Image.Dispose();
-                            pb.Image = Image.FromStream(mns);
-                        }
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
-                }
-
-                if (isJumper)
-                {
-                    if (pb.Image != null)
-                    {
-                        pb.Image.Dispose();
-                        pb.Image = null;
-                    }
-                    pb.BackColor = Color.Blue;
-                    try
-                    {
-                        using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
-                        {
-                            if (pb.Image != null) pb.Image.Dispose();
-                            pb.Image = Image.FromStream(ms);
-                        }
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
+                    pb.Image = normalPlatformImg;
                     return;
                 }
-
+                if (isJumper)
+                {
+                    pb.BackColor = Color.Blue;
+                    pb.Image = normalPlatformImg;
+                    return;
+                }
                 if (isBreakable)
                 {
                     pb.BackColor = Color.SaddleBrown;
-                    try
-                    {
-                        using (MemoryStream ms = new MemoryStream(Properties.Resources.breakcol))
-                        {
-                            if (pb.Image != null) pb.Image.Dispose();
-                            pb.Image = Image.FromStream(ms);
-                        }
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
+                    pb.Image = breakPlatformImg;
                 }
                 else
                 {
-                    // Звичайні платформи - зелені
                     pb.BackColor = Color.ForestGreen;
-
-                    try
-                    {
-                        using (MemoryStream ms = new MemoryStream(Properties.Resources.coledge))
-                        {
-                            if (pb.Image != null) pb.Image.Dispose();
-                            pb.Image = Image.FromStream(ms);
-                        }
-                    }
-                    catch
-                    {
-                        pb.Image = null;
-                    }
+                    pb.Image = normalPlatformImg;
                 }
             }
             catch
             {
-                // Запасний варіант якщо все зламалось
+                if (isMonster) pb.BackColor = Color.White;
+                else if (isCasino) pb.BackColor = Color.Magenta;
+                else if (isBreakable) pb.BackColor = Color.SaddleBrown;
+                else if (isJumper) pb.BackColor = Color.Blue;
+                else pb.BackColor = Color.ForestGreen;
                 pb.Image = null;
-                if (isCasino)
-                    pb.BackColor = Color.Magenta;
-                else if (isBreakable)
-                    pb.BackColor = Color.SaddleBrown;
-                else if(isJumper)
-                    pb.BackColor = Color.Blue;
-                else
-                    pb.BackColor = Color.ForestGreen;
             }
         }
 
@@ -324,8 +266,6 @@ namespace Doodlejump
         {
             foreach (var p in platforms) this.Controls.Remove(p.View);
             platforms.Clear();
-
-            // Стартова платформа
             WorldPlatform first = new WorldPlatform();
             first.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
             first.IsCasino = false;
@@ -333,7 +273,8 @@ namespace Doodlejump
             first.IsBroken = false;
             first.IsJumper = false;
             first.IsMovable = false;
-            SetPlatformResource(first.View, false, false, false, false);
+            first.isMonster = false;
+            SetPlatformResource(first.View, false, false, false, false, false);
             first.WorldX = this.ClientSize.Width / 2 - 40;
             first.WorldY = 100;
 
@@ -345,35 +286,27 @@ namespace Doodlejump
             {
                 WorldPlatform wp = new WorldPlatform();
                 wp.View = new PictureBox { Size = new Size(80, 15), SizeMode = PictureBoxSizeMode.StretchImage };
-
-                // 5% шанс на Казино
                 wp.IsCasino = rnd.Next(0, 100) < 5;
                 wp.IsJumper = rnd.Next(0, 100) < 10 && !wp.IsCasino;
                 wp.IsMovable = rnd.Next(0, 100) < 20 && !wp.IsCasino && !wp.IsJumper;
+                wp.isMonster = false;
 
-                if (wp.IsCasino)
+                if (wp.IsCasino || wp.IsJumper || wp.isMonster)
                 {
                     wp.IsBreakable = false;
                     wp.IsBroken = false;
                 }
-                else if (wp.IsJumper)
-                {
-                    wp.IsBreakable = false;
-                    wp.IsBroken = false;
-                }
-                else if(wp.IsMovable)
+                else if (wp.IsMovable)
                 {
                     wp.Direction = rnd.Next(0, 2) == 0 ? -1 : 1;
                 }
                 else
                 {
-                    // ВИПРАВЛЕНО: 15% шанс на ламку платформу
                     wp.IsBreakable = rnd.Next(0, 100) < 15;
                     wp.IsBroken = false;
                 }
 
-                // Встановлюємо візуал
-                SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino, wp.IsJumper, wp.IsMovable);
+                SetPlatformResource(wp.View, wp.IsBreakable, wp.IsCasino, wp.IsJumper, wp.IsMovable, wp.isMonster);
 
                 wp.WorldX = rnd.Next(10, this.ClientSize.Width - 90);
                 wp.WorldY = nextY;
@@ -404,18 +337,24 @@ namespace Doodlejump
         private void GameTimerEvent(object sender, EventArgs e)
         {
             if (panelMenu.Visible || isPaused) return;
-
-            // 1. Рух гравця у світі
             playerWorldY += gravity;
             gravity += 1;
 
             if (gravity < 0)
             {
-                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zadneprup, "up");
+                if (currentAnimation != "up")
+                {
+                    pictureBoxPlayer.Image = playerUpImg;
+                    currentAnimation = "up";
+                }
             }
             else
             {
-                SetPlayerResource(pictureBoxPlayer, Properties.Resources.zandepr, "down");
+                if (currentAnimation != "down")
+                {
+                    pictureBoxPlayer.Image = playerDownImg;
+                    currentAnimation = "down";
+                }
             }
 
             if (gravity > 12) gravity = 12;
@@ -426,11 +365,8 @@ namespace Doodlejump
             if (playerWorldX + pictureBoxPlayer.Width < 0) playerWorldX = this.ClientSize.Width;
             else if (playerWorldX > this.ClientSize.Width) playerWorldX = -pictureBoxPlayer.Width;
 
-            // 2. Плавний рух камери
             int targetCameraY = playerWorldY - (this.ClientSize.Height / 2);
             if (targetCameraY < cameraY) cameraY += (targetCameraY - cameraY) / 4;
-
-            // РОЗРАХУНОК ОЧКІВ: Висота + Бонуси з казино 🎯
             int currentProgress = (-cameraY / 10) + scoreOffset;
             if (currentProgress > score)
             {
@@ -438,29 +374,57 @@ namespace Doodlejump
                 labelScore.Text = "Очки: " + score;
             }
 
-            // 3. Колізія
+            // --- ТОЧНИЙ ХІТБОКС ГРАВЦЯ (Зменшений на пару пікселів для чесності) ---
+            Rectangle playerRect = new Rectangle(
+                playerWorldX + 4,
+                playerWorldY + 2,
+                pictureBoxPlayer.Width - 8,
+                pictureBoxPlayer.Height - 4);
+
+            // --- СУПЕР ТОЧНІ ХІТБОКСИ ДЛЯ МОНСТРІВ ---
+            foreach (var p in platforms)
+            {
+                if (p.isMonster && !p.IsBroken)
+                {
+                    // Стискаємо хітбокс монстра всередину на 15%, щоб гравець не вмирав від порожнього прозорого фону картини
+                    int shrinkX = (int)(p.View.Width * 0.4);
+                    int shrinkY = (int)(p.View.Height * 0.4);
+
+                    Rectangle monsterHitbox = new Rectangle(
+                        p.WorldX + shrinkX,
+                        p.WorldY + shrinkY,
+                        p.View.Width - (shrinkX * 2),
+                        p.View.Height - (shrinkY * 2)
+                    );
+
+                    if (playerRect.IntersectsWith(monsterHitbox))
+                    {
+                        gameTimer.Stop();
+                        this.Refresh();
+                        MessageBox.Show($"Тебе з'їв монстр!\nTвій результат: {score} очків.");
+                        ShowMainMenu();
+                        return;
+                    }
+                }
+            }
+
+            // Звичайні колізії платформ при падінні вниз
             if (gravity > 0)
             {
-                Rectangle playerRect = new Rectangle(
-                    playerWorldX,
-                    playerWorldY,
-                    pictureBoxPlayer.Width,
-                    pictureBoxPlayer.Height);
-
                 foreach (var platform in platforms)
                 {
-                    if (platform.IsBroken)
+                    if (platform.IsBroken || platform.isMonster)
                         continue;
 
                     Rectangle platformRect = new Rectangle(
                         platform.WorldX,
                         platform.WorldY,
                         platform.View.Width,
-                        platform.View.Height);
+                        6);
 
                     if (playerRect.IntersectsWith(platformRect))
                     {
-                        if (playerWorldY + pictureBoxPlayer.Height - gravity <= platform.WorldY)
+                        if (playerWorldY + pictureBoxPlayer.Height - gravity <= platform.WorldY + 6)
                         {
                             if (platform.IsBreakable)
                             {
@@ -479,21 +443,18 @@ namespace Doodlejump
                                     gravity = 0;
 
                                     gameTimer.Stop();
-
-                                    // Передаємо поточні очки в казино
                                     Casino cs = new Casino(score);
                                     cs.ShowDialog();
-                                    // ОБЧИСЛЕННЯ БОНУСУ: Дізнаємося, скільки саме гравець виграв/програв у казино
+
                                     int casinoWin = cs.CurrentScore - score;
-                                    scoreOffset += casinoWin; // Додаємо цей результат до загального зміщення очок
+                                    scoreOffset += casinoWin;
+                                    score = cs.CurrentScore;
+                                    labelScore.Text = "Очки: " + score;
 
-                                    score = cs.CurrentScore; // Оновлюємо поточні очки
-                                    labelScore.Text = "Очки: " + score; // Виводимо гарний текст
-
-                                    gravity = -26; // Потужний стрибок
+                                    gravity = -26;
                                     gameTimer.Start();
                                 }
-                                else if (platform.IsJumper) gravity = -jumpSpeed * 4;
+                                else if (platform.IsJumper) gravity = -jumpSpeed * 2;
                                 else
                                 {
                                     gravity = -jumpSpeed;
@@ -506,17 +467,16 @@ namespace Doodlejump
                 }
             }
 
-            // 4. Екранне оновлення позицій
             pictureBoxPlayer.Left = playerWorldX;
             pictureBoxPlayer.Top = playerWorldY - cameraY;
 
             foreach (var platform in platforms)
             {
+                // Рух рухомих платформ
                 if (platform.IsMovable && !platform.IsBroken)
                 {
                     platform.WorldX += platformSpeed * platform.Direction;
 
-                    // Відскок від лівої та правої стінок форми
                     if (platform.WorldX <= 0)
                     {
                         platform.WorldX = 0;
@@ -528,6 +488,24 @@ namespace Doodlejump
                         platform.Direction = -1;
                     }
                 }
+
+                // --- ЛІТАЮЧИЙ МОНСТР ТУДИ-СЮДИ ---
+                if (platform.isMonster && !platform.IsBroken)
+                {
+                    platform.WorldX += MonsterSpeed * platform.Direction;
+
+                    if (platform.WorldX <= 0)
+                    {
+                        platform.WorldX = 0;
+                        platform.Direction = 1;
+                    }
+                    else if (platform.WorldX + platform.View.Width >= this.ClientSize.Width)
+                    {
+                        platform.WorldX = this.ClientSize.Width - platform.View.Width;
+                        platform.Direction = -1;
+                    }
+                }
+
                 platform.View.Left = platform.WorldX;
                 platform.View.Top = platform.WorldY - cameraY;
 
@@ -548,13 +526,21 @@ namespace Doodlejump
                     platform.WorldX = rnd.Next(10, this.ClientSize.Width - platform.View.Width - 10);
                     platform.WorldY = highestWorldY - rnd.Next(65, 80);
 
-                    // Повне скидання старих типів перед новим роллом
+                    // Скидаємо прапорці
                     platform.IsCasino = false;
                     platform.IsJumper = false;
                     platform.IsMovable = false;
                     platform.IsBreakable = false;
+                    platform.isMonster = false;
+
+                    // --- ВИПРАВЛЕНО: Правильна черга if - else if логіки ролу ---
                     int roll = rnd.Next(0, 100);
-                    if (roll < 5)
+                    if (score > 500 && rnd.Next(0, 100) < 15)
+                    {
+                        platform.isMonster = true;
+                        platform.Direction = rnd.Next(0, 2) == 0 ? 1 : -1; // Даємо монстру випадковий вектор руху
+                    }
+                    else if (roll < 5)
                     {
                         platform.IsCasino = true;
                     }
@@ -562,7 +548,7 @@ namespace Doodlejump
                     {
                         platform.IsJumper = true;
                     }
-                    else if (roll < 30) // 18% шанс, що платформа буде рухомою
+                    else if (roll < 35)
                     {
                         platform.IsMovable = true;
                         platform.Direction = rnd.Next(0, 2) == 0 ? 1 : -1;
@@ -576,14 +562,13 @@ namespace Doodlejump
                     platform.IsBroken = false;
                     platform.View.Visible = true;
 
-                    SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino, platform.IsJumper, platform.IsMovable);
+                    SetPlatformResource(platform.View, platform.IsBreakable, platform.IsCasino, platform.IsJumper, platform.IsMovable, platform.isMonster);
                     platform.View.BringToFront();
                 }
             }
 
             if (labelScore != null) labelScore.BringToFront();
 
-            // 5. Програш
             if (pictureBoxPlayer.Top > this.ClientSize.Height)
             {
                 gameTimer.Stop();
@@ -641,6 +626,7 @@ namespace Doodlejump
             if (player != null) player.Stop();
             Application.Exit();
         }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.P)
