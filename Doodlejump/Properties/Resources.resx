@@ -163,4 +163,10 @@
   <data name="solomko" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\solomko.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="bullet" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\depositphotos-425212108-track-gun-shot-bullet-ricochet-sound_VggG24NC.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Casino_sound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Casino.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

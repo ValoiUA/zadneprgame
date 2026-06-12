@@ -13,7 +13,7 @@ namespace Doodlejump
     public partial class FormSettings : Form
     {
         public static bool IsSoundOn = true;
-        public static int Volume = 50;
+        public static int Volume = 10;
 
 
         public FormSettings()

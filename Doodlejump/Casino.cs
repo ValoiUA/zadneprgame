@@ -21,6 +21,11 @@ namespace Doodlejump
         public int score = 0;
         bool isAnimating = false;
         bool isMine = false;
+        private System.Media.SoundPlayer casino_sound;
+        private byte[] mik;
+        private byte[] gum;
+        private byte[] mal;
+        private byte[] fedos;
         public int CurrentScore { get; private set; }
         public Casino(int scores)
         {
@@ -82,6 +87,7 @@ namespace Doodlejump
             pictureBox7.Image = images[0];
             pictureBox8.Image = images[0];
             pictureBox9.Image = images[0];
+            casino_sound = SetSoundResourse(Properties.Resources.Casino_sound);
 
             spins = rnd.Next(1, 10);
             lablelCount.Text = $"Spins: {spins}";
@@ -90,6 +96,17 @@ namespace Doodlejump
 
 
 
+        private System.Media.SoundPlayer SetSoundResourse(object music)
+        {
+            if (music is System.IO.Stream audioStream)
+            {
+                // Передаємо потік безпосередньо в SoundPlayer
+                System.Media.SoundPlayer musica = new System.Media.SoundPlayer(audioStream);
+                return musica;
+            }
+
+            return null;
+        }
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
@@ -100,6 +117,7 @@ namespace Doodlejump
             isAnimating = true; 
             int[] lastIdx = new int[9];
 
+            casino_sound.Play();
             for (int i = 0; i < 7; i++)
             {
                 int[] newIdx = new int[9];
@@ -133,6 +151,7 @@ namespace Doodlejump
             {
                 bet = customBet;
             }
+            casino_sound.Stop();
             checkCombo(bet);
         }
 
