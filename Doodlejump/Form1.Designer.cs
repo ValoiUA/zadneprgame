@@ -35,9 +35,9 @@
             buttonSettings = new Button();
             buttonExit = new Button();
             panelMenu = new Panel();
-            labelNick = new Label();
-            textBoxNick = new TextBox();
             buttonAccept = new Button();
+            textBoxNick = new TextBox();
+            labelNick = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlayer).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxPlatform).BeginInit();
             panelMenu.SuspendLayout();
@@ -47,7 +47,7 @@
             // 
             pictureBoxPlayer.Image = (Image)resources.GetObject("pictureBoxPlayer.Image");
             pictureBoxPlayer.Location = new Point(236, 241);
-            pictureBoxPlayer.Margin = new Padding(2, 2, 2, 2);
+            pictureBoxPlayer.Margin = new Padding(2);
             pictureBoxPlayer.Name = "pictureBoxPlayer";
             pictureBoxPlayer.Size = new Size(83, 145);
             pictureBoxPlayer.TabIndex = 0;
@@ -57,7 +57,7 @@
             // 
             pictureBoxPlatform.Image = (Image)resources.GetObject("pictureBoxPlatform.Image");
             pictureBoxPlatform.Location = new Point(466, 11);
-            pictureBoxPlatform.Margin = new Padding(2, 2, 2, 2);
+            pictureBoxPlatform.Margin = new Padding(2);
             pictureBoxPlatform.Name = "pictureBoxPlatform";
             pictureBoxPlatform.Size = new Size(105, 45);
             pictureBoxPlatform.TabIndex = 1;
@@ -107,6 +107,23 @@
             panelMenu.Size = new Size(199, 339);
             panelMenu.TabIndex = 5;
             // 
+            // buttonAccept
+            // 
+            buttonAccept.Location = new Point(70, 251);
+            buttonAccept.Name = "buttonAccept";
+            buttonAccept.Size = new Size(75, 23);
+            buttonAccept.TabIndex = 7;
+            buttonAccept.Text = "Accept";
+            buttonAccept.UseVisualStyleBackColor = true;
+            buttonAccept.Click += buttonAccept_Click;
+            // 
+            // textBoxNick
+            // 
+            textBoxNick.Location = new Point(51, 201);
+            textBoxNick.Name = "textBoxNick";
+            textBoxNick.Size = new Size(100, 23);
+            textBoxNick.TabIndex = 6;
+            // 
             // labelNick
             // 
             labelNick.AutoSize = true;
@@ -116,22 +133,6 @@
             labelNick.TabIndex = 5;
             labelNick.Text = "Nickname";
             // 
-            // textBoxNick
-            // 
-            textBoxNick.Location = new Point(51, 201);
-            textBoxNick.Name = "textBoxNick";
-            textBoxNick.Size = new Size(100, 23);
-            textBoxNick.TabIndex = 6;
-            // 
-            // buttonAccept
-            // 
-            buttonAccept.Location = new Point(70, 251);
-            buttonAccept.Name = "buttonAccept";
-            buttonAccept.Size = new Size(75, 23);
-            buttonAccept.TabIndex = 7;
-            buttonAccept.Text = "Accept";
-            buttonAccept.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -140,7 +141,7 @@
             Controls.Add(panelMenu);
             Controls.Add(pictureBoxPlatform);
             Controls.Add(pictureBoxPlayer);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;

@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using NAudio.Wave;
+using System.Text.Json;
+
 
 namespace Doodlejump
 {
@@ -40,9 +42,9 @@ namespace Doodlejump
         public class User
         {
             public string Name { get; set; }
-            public int Score { get; set; }
+            public int MaxScore { get; set; }
         }
-
+        List<User> users = new List<User>();
         List<WorldPlatform> platforms = new List<WorldPlatform>();
         List<Bullet> bullets = new List<Bullet>();
         Random rnd = new Random();
@@ -57,6 +59,7 @@ namespace Doodlejump
         bool goRight = false;
         bool isPaused = false;
         public int score = 0;
+        Label labelMaxScore;
 
         Label labelScore;
         string musicPath;
@@ -68,7 +71,7 @@ namespace Doodlejump
         int MonsterSpeed = 4;
         int bulletSpeed = 15;
         private string currentAnimation = "";
-
+        string currentPlayerName = "";
         // Кеш зображень (завантажуються 1 раз)
         private Image normalPlatformImg;
         private Image breakPlatformImg;
@@ -94,6 +97,69 @@ namespace Doodlejump
                 return cp;
             }
         }
+        private void LoadUsers()
+        {
+            try
+            {
+                if (File.Exists("users.json"))
+                {
+                    string json = File.ReadAllText("users.json");
+
+                    if (!string.IsNullOrWhiteSpace(json))
+                    {
+                        users = JsonSerializer.Deserialize<List<User>>(json);
+                    }
+                }
+
+                if (users == null)
+                    users = new List<User>();
+            }
+            catch
+            {
+                users = new List<User>();
+            }
+        }
+
+
+        private void SaveUsers()
+        {
+            string json = JsonSerializer.Serialize(
+                users,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+            File.WriteAllText("users.json", json);
+        }
+        private void UpdatePlayerScore()
+        {
+            User user = users.Find(x => x.Name == currentPlayerName);
+
+
+            if (user == null)
+            {
+                users.Add(new User
+                {
+                    Name = currentPlayerName,
+                    MaxScore = score
+                });
+                labelMaxScore.Text = $"Рекорд: {score}";
+            }
+            else
+            {
+                if (score > user.MaxScore)
+                {
+                    user.MaxScore = score;
+                }
+                labelMaxScore.Text = $"Рекорд: {user.MaxScore}";
+            }
+
+
+            SaveUsers();
+        }
+
+
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -107,7 +173,38 @@ namespace Doodlejump
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+        private void AddScore(string name, int score)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return;
 
+
+            User user = users.Find(x => x.Name == name);
+
+
+            if (user == null)
+            {
+                users.Add(new User
+                {
+                    Name = name,
+                    MaxScore = score
+                });
+            }
+            else
+            {
+                if (score > user.MaxScore)
+                    user.MaxScore = score;
+            }
+
+
+            users = users
+                .OrderByDescending(x => x.MaxScore)
+                .Take(10)
+                .ToList();
+
+
+            SaveUsers();
+        }
         public Form1()
         {
             InitializeComponent();
@@ -226,7 +323,7 @@ namespace Doodlejump
             pictureBoxPlayer.SizeMode = PictureBoxSizeMode.Zoom;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-
+            LoadUsers();
             // Завантажуємо текстури в пам'ять ОДИН раз
             normalPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.coledge));
             breakPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.breakcol));
@@ -243,6 +340,9 @@ namespace Doodlejump
             labelPause = new Label { Text = "ПАУЗА\n[Натисніть P для продовження]", Font = new Font("Arial", 22, FontStyle.Bold), ForeColor = Color.Red, BackColor = Color.Transparent, TextAlign = ContentAlignment.MiddleCenter, AutoSize = true, Visible = false };
             this.Controls.Add(labelPause);
 
+            labelMaxScore = new Label { Text = "Рекорд: 0", Font = new Font("Arial", 14, FontStyle.Italic), ForeColor = Color.DarkRed, BackColor = Color.Transparent, AutoSize = true, Location = new Point(10, 40) };
+            this.Controls.Add(labelMaxScore);
+
             ShowMainMenu();
         }
 
@@ -251,6 +351,7 @@ namespace Doodlejump
             gameTimer.Stop();
             isPaused = false;
             if (labelScore != null) labelScore.Visible = false;
+            if (labelMaxScore != null) labelMaxScore.Visible = false;
             if (labelPause != null) labelPause.Visible = false;
 
             platforms.Clear();
@@ -258,7 +359,7 @@ namespace Doodlejump
 
             panelMenu.Visible = true;
             panelMenu.BringToFront();
-            this.Invalidate(); 
+            this.Invalidate();
         }
 
         private void ClearBullets()
@@ -353,7 +454,11 @@ namespace Doodlejump
                     {
                         gameTimer.Stop();
                         this.Refresh();
-                        MessageBox.Show($"Тебе з'їв монстр!\nTвій результат: {score} очків.");
+                        AddScore(currentPlayerName, score);
+
+                        MessageBox.Show(
+                            $"Ти впав!\nТвій результат: {score} очків."
+                        );
                         ShowMainMenu();
                         return;
                     }
@@ -503,7 +608,13 @@ namespace Doodlejump
             if (playerWorldY - cameraY > this.ClientSize.Height)
             {
                 gameTimer.Stop();
-                MessageBox.Show($"Ти впав!\nТвій результат: {score} очків.");
+                UpdatePlayerScore();
+
+                MessageBox.Show(
+                    $"Ти впав!\n" +
+                    $"Результат: {score}\n" +
+                    $"Гравець: {currentPlayerName}"
+                );
                 ShowMainMenu();
                 return;
             }
@@ -515,7 +626,7 @@ namespace Doodlejump
         // 🎨 СУПЕР-ОПТИМІЗОВАНИЙ КЕШОВАНИЙ РЕНДЕРИНГ ГРИ
         // ==========================================
         private void Form1_Paint(object sender, PaintEventArgs e)
-        { 
+        {
             if (panelMenu.Visible) return;
 
             Graphics g = e.Graphics;
@@ -608,6 +719,7 @@ namespace Doodlejump
             score = 0; scoreOffset = 0; isPaused = false; currentAnimation = "";
             if (labelScore != null) { labelScore.Text = "Очки: 0"; labelScore.Visible = true; }
             if (labelPause != null) labelPause.Visible = false;
+            if (labelMaxScore != null) { labelMaxScore.Visible = true; }
 
             cameraY = 0;
             GeneratePlatforms();
@@ -626,6 +738,7 @@ namespace Doodlejump
             panelMenu.Visible = false;
             ResetGame();
         }
+
 
         private void buttonSettings_Click(object sender, EventArgs e)
         {
@@ -653,6 +766,27 @@ namespace Doodlejump
         {
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A) goLeft = false;
             if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D) goRight = false;
+        }
+
+        private void buttonAccept_Click(object sender, EventArgs e)
+        {
+            currentPlayerName = textBoxNick.Text.Trim();
+
+
+            if (string.IsNullOrEmpty(currentPlayerName))
+            {
+                currentPlayerName = "Player";
+            }
+            User user = users.Find(x => x.Name == currentPlayerName);
+            if (user != null)
+            {
+                labelMaxScore.Text = $"Рекорд: {user.MaxScore}";
+            }
+            else
+            {
+                labelMaxScore.Text = "Рекорд: 0";
+            }
+
         }
     }
 }
