@@ -12,7 +12,6 @@ E:\zadneprgame\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinForms.dll
 E:\zadneprgame\Doodlejump\bin\Debug\net8.0-windows\NAudio.WinMM.dll
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.AssemblyReference.cache
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Casino.resources
-E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Form1.resources
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.FormSettings.resources
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.Properties.Resources.resources
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.csproj.GenerateResource.cache
@@ -57,3 +56,4 @@ C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows
 C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.genruntimeconfig.cache
 C:\Users\PC\Desktop\VLAD\praktika\Doodlejump\Doodlejump\obj\Debug\net8.0-windows\ref\Doodlejump.dll
 E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.FormLeaderBoard.resources
+E:\zadneprgame\Doodlejump\obj\Debug\net8.0-windows\Doodlejump.DodleJump.resources

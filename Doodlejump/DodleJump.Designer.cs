@@ -1,6 +1,6 @@
 ﻿namespace Doodlejump
 {
-    partial class Form1
+    partial class DodleJump
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DodleJump));
             pictureBoxPlayer = new PictureBox();
             pictureBoxPlatform = new PictureBox();
             buttonPlay = new Button();

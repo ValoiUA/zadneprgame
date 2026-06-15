@@ -12,7 +12,7 @@ namespace Doodlejump
 {
     public partial class FormLeaderBoard : Form
     {
-        public FormLeaderBoard(List<Form1.User> users)
+        public FormLeaderBoard(List<DodleJump.User> users)
         {
             InitializeComponent();
             this.Height = 450;

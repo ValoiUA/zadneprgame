@@ -13,7 +13,7 @@ using System.Text.Json;
 
 namespace Doodlejump
 {
-    public partial class Form1 : Form
+    public partial class DodleJump : Form
     {
         [DllImport("winmm.dll")] private static extern long mciSendString(string command, StringBuilder returnString, int returnLength, IntPtr callback);
         public class WorldPlatform
@@ -205,7 +205,7 @@ namespace Doodlejump
 
             SaveUsers();
         }
-        public Form1()
+        public DodleJump()
         {
             InitializeComponent();
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);

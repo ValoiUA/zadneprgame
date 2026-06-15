@@ -4,7 +4,7 @@
     <Compile Update="Casino.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Form1.cs">
+    <Compile Update="DodleJump.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="FormLeaderBoard.cs">
