@@ -124,8 +124,7 @@ namespace Doodlejump
 
         private void SaveUsers()
         {
-            string json = JsonSerializer.Serialize(
-                users,
+            string json = JsonSerializer.Serialize(users,
                 new JsonSerializerOptions
                 {
                     WriteIndented = true
@@ -318,6 +317,7 @@ namespace Doodlejump
         {
             this.Size = new Size(450, 700);
             this.DoubleBuffered = true;
+            pictureBoxPlayer.Visible = false;
             pictureBoxPlayer.SizeMode = PictureBoxSizeMode.Zoom;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -327,7 +327,11 @@ namespace Doodlejump
             playerUpImg = Image.FromStream(new MemoryStream(Properties.Resources.zadneprup));
             playerDownImg = Image.FromStream(new MemoryStream(Properties.Resources.zandepr));
             Monster = Image.FromStream(new MemoryStream(Properties.Resources.solomko));
+            easyBg = Image.FromStream(new MemoryStream(Properties.Resources.easybg));
+            mediumBg = Image.FromStream(new MemoryStream(Properties.Resources.mediumbg));
+            hardBg = Image.FromStream(new MemoryStream(Properties.Resources.hardbg));
             listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
+            currentBackground = easyBg;
 
             shootSoundData = Properties.Resources.bullet;
             pictureBoxPlayer.Visible = false;
@@ -357,10 +361,7 @@ namespace Doodlejump
 
             panelMenu.Visible = true;
             panelMenu.BringToFront();
-            panelMenu.Location = new Point(
-        (this.ClientSize.Width - panelMenu.Width) / 2,
-        (this.ClientSize.Height - panelMenu.Height) / 2
-    );
+            panelMenu.Location = new Point((this.ClientSize.Width - panelMenu.Width) / 2, (this.ClientSize.Height - panelMenu.Height) / 2);
             this.Invalidate();
         }
         private void GeneratePlatforms()
@@ -421,6 +422,19 @@ namespace Doodlejump
             {
                 score = currentProgress;
                 labelScore.Text = "Очки: " + score;
+                if (score < 500)
+                {
+                    currentBackground = easyBg;
+                }
+                else if (score >= 500 && score < 1000)
+                {
+                    currentBackground = mediumBg;
+                }
+                else if (score >= 1000)
+                {
+                    currentBackground = hardBg;
+                }
+
             }
             Rectangle playerRect = new Rectangle(playerWorldX + 12, playerWorldY + 4, 36, 50);
             foreach (var p in platforms)
@@ -582,7 +596,6 @@ namespace Doodlejump
             {
                 gameTimer.Stop();
                 UpdatePlayerScore();
-
                 MessageBox.Show(
                     $"Ти впав!\n" +
                     $"Результат: {score}\n" +
@@ -599,6 +612,10 @@ namespace Doodlejump
             if (panelMenu.Visible) return;
 
             Graphics g = e.Graphics;
+            if (currentBackground != null)
+            {
+                g.DrawImage(currentBackground, 0, 0, this.ClientSize.Width, this.ClientSize.Height);
+            }
             using (Brush bulletBrush = new SolidBrush(Color.Orange))
             {
                 foreach (var b in bullets)
@@ -697,7 +714,9 @@ namespace Doodlejump
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if (currentPlayerName.Trim() != textBoxNick.Text.Trim()){ listBoxHistory.Items.Clear(); 
+            if (currentPlayerName.Trim() != textBoxNick.Text.Trim())
+            {
+                listBoxHistory.Items.Clear();
                 listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
             }
             currentPlayerName = textBoxNick.Text.Trim();
@@ -756,7 +775,9 @@ namespace Doodlejump
 
         private void buttonAccept_Click(object sender, EventArgs e)
         {
-            if (currentPlayerName.Trim() != textBoxNick.Text.Trim()) { listBoxHistory.Items.Clear();
+            if (currentPlayerName.Trim() != textBoxNick.Text.Trim())
+            {
+                listBoxHistory.Items.Clear();
                 listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
             }
 
@@ -779,6 +800,14 @@ namespace Doodlejump
 
         private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void buttonLeaderBoard_Click(object sender, EventArgs e)
+        {
+            LoadUsers();
+            FormLeaderBoard f = new FormLeaderBoard(this.users);
+            f.ShowDialog();
 
         }
     }

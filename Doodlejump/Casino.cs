@@ -100,7 +100,6 @@ namespace Doodlejump
         {
             if (music is System.IO.Stream audioStream)
             {
-                // Передаємо потік безпосередньо в SoundPlayer
                 System.Media.SoundPlayer musica = new System.Media.SoundPlayer(audioStream);
                 return musica;
             }
@@ -193,7 +192,6 @@ namespace Doodlejump
                 }
                 won = true;
             }
-            // 2. ДІАГОНАЛІ
             if (i1 != null && i1 == i5 && i5 == i9)
             {
                 score += bet * 5;
@@ -213,7 +211,6 @@ namespace Doodlejump
                 won = true;
             }
 
-            // 3. ГОРИЗОНТАЛІ
             if (i1 != null && i1 == i2 && i2 == i3)
             {
                 score += bet * 3;
