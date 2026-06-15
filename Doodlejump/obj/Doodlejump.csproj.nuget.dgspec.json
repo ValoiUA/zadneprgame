@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\zadneprgame\\Doodlejump\\Doodlejump.csproj": {}
+    "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Doodlejump.csproj": {}
   },
   "projects": {
-    "E:\\zadneprgame\\Doodlejump\\Doodlejump.csproj": {
+    "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Doodlejump.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\zadneprgame\\Doodlejump\\Doodlejump.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Doodlejump.csproj",
         "projectName": "Doodlejump",
-        "projectPath": "E:\\zadneprgame\\Doodlejump\\Doodlejump.csproj",
-        "packagesPath": "C:\\Users\\vlad\\.nuget\\packages\\",
-        "outputPath": "E:\\zadneprgame\\Doodlejump\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\Doodlejump.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Desktop\\VLAD\\praktika\\Doodlejump\\Doodlejump\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vlad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,8 +25,7 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0-windows": {
-            "framework": "net8.0-windows7.0",
+          "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {}
           }
@@ -40,12 +39,10 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.300"
+        }
       },
       "frameworks": {
-        "net8.0-windows": {
-          "framework": "net8.0-windows7.0",
+        "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
             "NAudio": {
@@ -72,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

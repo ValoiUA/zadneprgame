@@ -72,13 +72,15 @@ namespace Doodlejump
         int bulletSpeed = 15;
         private string currentAnimation = "";
         string currentPlayerName = "";
-        // Кеш зображень (завантажуються 1 раз)
         private Image normalPlatformImg;
         private Image breakPlatformImg;
         private Image playerUpImg;
         private Image playerDownImg;
         private Image Monster;
-
+        private Image easyBg;
+        private Image mediumBg;
+        private Image hardBg;
+        private Image currentBackground;
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
         private byte[] shootSoundData;
@@ -87,13 +89,12 @@ namespace Doodlejump
 
         System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
 
-        // Апаратне згладжування та буферизація вікна
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                cp.ExStyle |= 0x02000000;
                 return cp;
             }
         }
@@ -208,8 +209,6 @@ namespace Doodlejump
         public Form1()
         {
             InitializeComponent();
-
-            // Вмикаємо double-buffering для форми
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
 
             gameTimer.Interval = 20;
@@ -217,7 +216,7 @@ namespace Doodlejump
 
             this.KeyDown += Form1_KeyDown;
             this.KeyUp += Form1_KeyUp;
-            this.Paint += Form1_Paint; // Підключаємо ручний рендеринг гри
+            this.Paint += Form1_Paint;
             this.KeyPreview = true;
 
             PrepareAndPlayBackgroundMusic();
@@ -228,11 +227,10 @@ namespace Doodlejump
 
             try
             {
-                // Перетворюємо масив байтів у потік пам'яті
+
                 using (MemoryStream ms = new MemoryStream(audioResource))
                 using (SoundPlayer effectPlayer = new SoundPlayer(ms))
                 {
-                    // ВИПРАВЛЕНО: Використовуємо PlaySync(), щоб встигнути відтворити короткий звук до очищення об'єкта
                     effectPlayer.PlaySync();
                 }
             }
@@ -324,12 +322,12 @@ namespace Doodlejump
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             LoadUsers();
-            // Завантажуємо текстури в пам'ять ОДИН раз
             normalPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.coledge));
             breakPlatformImg = Image.FromStream(new MemoryStream(Properties.Resources.breakcol));
             playerUpImg = Image.FromStream(new MemoryStream(Properties.Resources.zadneprup));
             playerDownImg = Image.FromStream(new MemoryStream(Properties.Resources.zandepr));
             Monster = Image.FromStream(new MemoryStream(Properties.Resources.solomko));
+            listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
 
             shootSoundData = Properties.Resources.bullet;
             pictureBoxPlayer.Visible = false;
@@ -359,30 +357,21 @@ namespace Doodlejump
 
             panelMenu.Visible = true;
             panelMenu.BringToFront();
+            panelMenu.Location = new Point(
+        (this.ClientSize.Width - panelMenu.Width) / 2,
+        (this.ClientSize.Height - panelMenu.Height) / 2
+    );
             this.Invalidate();
         }
-
-        private void ClearBullets()
-        {
-            bullets.Clear();
-        }
-
         private void GeneratePlatforms()
         {
             platforms.Clear();
-
-            // Стартова платформа - завжди безпечна база
             platforms.Add(new WorldPlatform { WorldX = this.ClientSize.Width / 2 - 40, WorldY = 100 });
             int nextY = 180;
-
             for (int i = 0; i < 12; i++)
             {
                 WorldPlatform wp = new WorldPlatform();
-
-                // Дивимось, що ми створили прямо перед цією платформою
                 WorldPlatform previousPlatform = platforms[platforms.Count - 1];
-
-                // Якщо попередня платформа була монстром або ламалася - цю робимо залізобетонно безпечною
                 if (previousPlatform.isMonster || previousPlatform.IsBreakable)
                 {
                     wp.isMonster = false;
@@ -395,7 +384,6 @@ namespace Doodlejump
                 }
                 else
                 {
-                    // Якщо попередня була безпечною, можемо спокійно ровлювати випадковий тип
                     wp.IsCasino = rnd.Next(0, 100) < 5;
                     wp.IsJumper = rnd.Next(0, 100) < 10 && !wp.IsCasino;
                     wp.IsMovable = rnd.Next(0, 100) < 20 && !wp.IsCasino && !wp.IsJumper;
@@ -416,15 +404,12 @@ namespace Doodlejump
         private void GameTimerEvent(object sender, EventArgs e)
         {
             if (panelMenu.Visible || isPaused) return;
-
             playerWorldY += gravity;
             gravity += 1;
             if (gravity > 12) gravity = 12;
 
             if (goLeft) playerWorldX -= playerSpeed;
             if (goRight) playerWorldX += playerSpeed;
-
-            // Циклічний екран для гравця
             if (playerWorldX + 60 < 0) playerWorldX = this.ClientSize.Width;
             else if (playerWorldX > this.ClientSize.Width) playerWorldX = -60;
 
@@ -437,11 +422,7 @@ namespace Doodlejump
                 score = currentProgress;
                 labelScore.Text = "Очки: " + score;
             }
-
-            // --- КОРЕКТНИЙ ХІТБОКС ГРАВЦЯ ---
             Rectangle playerRect = new Rectangle(playerWorldX + 12, playerWorldY + 4, 36, 50);
-
-            // --- КОЛІЗІЯ З МОНСТРАМИ ---
             foreach (var p in platforms)
             {
                 if (p.isMonster && !p.IsBroken)
@@ -457,15 +438,14 @@ namespace Doodlejump
                         AddScore(currentPlayerName, score);
 
                         MessageBox.Show(
-                            $"Ти впав!\nТвій результат: {score} очків."
+                            $"Тебе з'їв монстр!\nТвій результат: {score} очків."
                         );
                         ShowMainMenu();
+                        listBoxHistory.Items.Add($"{currentPlayerName}\t{score}\tMonstr");
                         return;
                     }
                 }
             }
-
-            // --- ЛОГІКА ПОЛЬОТУ ТА КОЛІЗІЇ КУЛЬ ---
             for (int i = bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = bullets[i];
@@ -496,8 +476,6 @@ namespace Doodlejump
 
                 if (bullet.WorldY - cameraY < -50) bullets.RemoveAt(i);
             }
-
-            // --- КОЛІЗІЯ З ПЛАТФОРМАМИ (ПАДІННЯ ВНИЗ) ---
             if (gravity > 0)
             {
                 foreach (var platform in platforms)
@@ -532,7 +510,7 @@ namespace Doodlejump
                                     labelScore.Text = "Очки: " + score;
 
                                     gravity = -26;
-                                    TogglePause(); // Залишаємо гру на паузі після виходу з казино
+                                    TogglePause();
                                 }
                                 else if (platform.IsJumper) gravity = -jumpSpeed * 2;
                                 else gravity = -jumpSpeed;
@@ -543,8 +521,6 @@ namespace Doodlejump
                     }
                 }
             }
-
-            // --- ОНОВЛЕННЯ ТА ПЕРЕГЕНЕРАЦІЯ РУХОМИХ ОБ'ЄКТІВ ---
             foreach (var platform in platforms)
             {
                 if (platform.IsMovable && !platform.IsBroken)
@@ -560,8 +536,6 @@ namespace Doodlejump
                     if (platform.WorldX <= 0) { platform.WorldX = 0; platform.Direction = 1; }
                     else if (platform.WorldX + platform.Width >= this.ClientSize.Width) { platform.WorldX = this.ClientSize.Width - platform.Width; platform.Direction = -1; }
                 }
-
-                // Перезапуск платформи наверх
                 if (platform.WorldY - cameraY > this.ClientSize.Height + 50)
                 {
                     int highestWorldY = this.ClientSize.Height;
@@ -576,7 +550,6 @@ namespace Doodlejump
 
                     platform.IsCasino = false; platform.IsJumper = false; platform.IsMovable = false; platform.IsBreakable = false; platform.isMonster = false;
 
-                    // ПЕРЕВІРКА "ВИХІД Є ЗАВЖДИ"
                     if (highestPlatform != null && (highestPlatform.isMonster || highestPlatform.IsBreakable))
                     {
                         int roll = rnd.Next(0, 100);
@@ -616,22 +589,16 @@ namespace Doodlejump
                     $"Гравець: {currentPlayerName}"
                 );
                 ShowMainMenu();
+                listBoxHistory.Items.Add($"{currentPlayerName}\t{score}\tDroped");
                 return;
             }
-
             this.Invalidate();
         }
-
-        // ==========================================
-        // 🎨 СУПЕР-ОПТИМІЗОВАНИЙ КЕШОВАНИЙ РЕНДЕРИНГ ГРИ
-        // ==========================================
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             if (panelMenu.Visible) return;
 
             Graphics g = e.Graphics;
-
-            // 1. Малюємо кулі
             using (Brush bulletBrush = new SolidBrush(Color.Orange))
             {
                 foreach (var b in bullets)
@@ -639,8 +606,6 @@ namespace Doodlejump
                     g.FillRectangle(bulletBrush, b.WorldX, b.WorldY - cameraY, b.Width, b.Height);
                 }
             }
-
-            // 2. Малюємо платформи та монстрів
             foreach (var p in platforms)
             {
                 if (p.IsBroken) continue;
@@ -677,8 +642,6 @@ namespace Doodlejump
                     g.DrawImage(normalPlatformImg, screenX, screenY, p.Width, p.Height);
                 }
             }
-
-            // 3. Малюємо гравця
             Image currentPlayerImg = (gravity < 0) ? playerUpImg : playerDownImg;
             g.DrawImage(currentPlayerImg, playerWorldX, playerWorldY - cameraY, 60, 60);
         }
@@ -734,9 +697,32 @@ namespace Doodlejump
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
+            if (currentPlayerName.Trim() != textBoxNick.Text.Trim()){ listBoxHistory.Items.Clear(); 
+                listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
+            }
+            currentPlayerName = textBoxNick.Text.Trim();
 
-            panelMenu.Visible = false;
-            ResetGame();
+
+            if (string.IsNullOrEmpty(currentPlayerName))
+            {
+                currentPlayerName = "Player";
+                panelMenu.Visible = false;
+                ResetGame();
+            }
+            User user = users.Find(x => x.Name == currentPlayerName);
+            if (user != null)
+            {
+                panelMenu.Visible = false;
+                ResetGame();
+                labelMaxScore.Text = $"Рекорд: {user.MaxScore}";
+            }
+            else
+            {
+                panelMenu.Visible = false;
+                ResetGame();
+                labelMaxScore.Text = "Рекорд: 0";
+            }
+
         }
 
 
@@ -770,6 +756,10 @@ namespace Doodlejump
 
         private void buttonAccept_Click(object sender, EventArgs e)
         {
+            if (currentPlayerName.Trim() != textBoxNick.Text.Trim()) { listBoxHistory.Items.Clear();
+                listBoxHistory.Items.Add("Гравець\tОчки\tСтатус");
+            }
+
             currentPlayerName = textBoxNick.Text.Trim();
 
 
@@ -784,8 +774,11 @@ namespace Doodlejump
             }
             else
             {
-                labelMaxScore.Text = "Рекорд: 0";
             }
+        }
+
+        private void listBoxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

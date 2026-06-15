@@ -35,6 +35,7 @@
             buttonSettings = new Button();
             buttonExit = new Button();
             panelMenu = new Panel();
+            listBoxHistory = new ListBox();
             buttonAccept = new Button();
             textBoxNick = new TextBox();
             labelNick = new Label();
@@ -46,29 +47,28 @@
             // pictureBoxPlayer
             // 
             pictureBoxPlayer.Image = (Image)resources.GetObject("pictureBoxPlayer.Image");
-            pictureBoxPlayer.Location = new Point(236, 241);
-            pictureBoxPlayer.Margin = new Padding(2);
+            pictureBoxPlayer.Location = new Point(337, 402);
             pictureBoxPlayer.Name = "pictureBoxPlayer";
-            pictureBoxPlayer.Size = new Size(83, 145);
+            pictureBoxPlayer.Size = new Size(119, 242);
             pictureBoxPlayer.TabIndex = 0;
             pictureBoxPlayer.TabStop = false;
             // 
             // pictureBoxPlatform
             // 
             pictureBoxPlatform.Image = (Image)resources.GetObject("pictureBoxPlatform.Image");
-            pictureBoxPlatform.Location = new Point(466, 11);
-            pictureBoxPlatform.Margin = new Padding(2);
+            pictureBoxPlatform.Location = new Point(666, 18);
             pictureBoxPlatform.Name = "pictureBoxPlatform";
-            pictureBoxPlatform.Size = new Size(105, 45);
+            pictureBoxPlatform.Size = new Size(150, 75);
             pictureBoxPlatform.TabIndex = 1;
             pictureBoxPlatform.TabStop = false;
             pictureBoxPlatform.Visible = false;
             // 
             // buttonPlay
             // 
-            buttonPlay.Location = new Point(45, 20);
+            buttonPlay.Location = new Point(64, 33);
+            buttonPlay.Margin = new Padding(4, 5, 4, 5);
             buttonPlay.Name = "buttonPlay";
-            buttonPlay.Size = new Size(106, 41);
+            buttonPlay.Size = new Size(151, 68);
             buttonPlay.TabIndex = 2;
             buttonPlay.Text = "Play";
             buttonPlay.UseVisualStyleBackColor = true;
@@ -76,9 +76,10 @@
             // 
             // buttonSettings
             // 
-            buttonSettings.Location = new Point(45, 67);
+            buttonSettings.Location = new Point(64, 112);
+            buttonSettings.Margin = new Padding(4, 5, 4, 5);
             buttonSettings.Name = "buttonSettings";
-            buttonSettings.Size = new Size(106, 41);
+            buttonSettings.Size = new Size(151, 68);
             buttonSettings.TabIndex = 3;
             buttonSettings.Text = "Setting";
             buttonSettings.UseVisualStyleBackColor = true;
@@ -86,9 +87,10 @@
             // 
             // buttonExit
             // 
-            buttonExit.Location = new Point(45, 114);
+            buttonExit.Location = new Point(64, 190);
+            buttonExit.Margin = new Padding(4, 5, 4, 5);
             buttonExit.Name = "buttonExit";
-            buttonExit.Size = new Size(106, 41);
+            buttonExit.Size = new Size(151, 68);
             buttonExit.TabIndex = 4;
             buttonExit.Text = "Exit";
             buttonExit.UseVisualStyleBackColor = true;
@@ -96,22 +98,35 @@
             // 
             // panelMenu
             // 
+            panelMenu.Controls.Add(listBoxHistory);
             panelMenu.Controls.Add(buttonAccept);
             panelMenu.Controls.Add(textBoxNick);
             panelMenu.Controls.Add(labelNick);
             panelMenu.Controls.Add(buttonPlay);
             panelMenu.Controls.Add(buttonExit);
             panelMenu.Controls.Add(buttonSettings);
-            panelMenu.Location = new Point(176, 12);
+            panelMenu.Location = new Point(251, 20);
+            panelMenu.Margin = new Padding(4, 5, 4, 5);
             panelMenu.Name = "panelMenu";
-            panelMenu.Size = new Size(199, 339);
+            panelMenu.Size = new Size(303, 624);
             panelMenu.TabIndex = 5;
+            // 
+            // listBoxHistory
+            // 
+            listBoxHistory.FormattingEnabled = true;
+            listBoxHistory.ItemHeight = 25;
+            listBoxHistory.Location = new Point(10, 448);
+            listBoxHistory.Name = "listBoxHistory";
+            listBoxHistory.Size = new Size(293, 179);
+            listBoxHistory.TabIndex = 8;
+            listBoxHistory.SelectedIndexChanged += listBoxHistory_SelectedIndexChanged;
             // 
             // buttonAccept
             // 
-            buttonAccept.Location = new Point(70, 251);
+            buttonAccept.Location = new Point(98, 382);
+            buttonAccept.Margin = new Padding(4, 5, 4, 5);
             buttonAccept.Name = "buttonAccept";
-            buttonAccept.Size = new Size(75, 23);
+            buttonAccept.Size = new Size(107, 38);
             buttonAccept.TabIndex = 7;
             buttonAccept.Text = "Accept";
             buttonAccept.UseVisualStyleBackColor = true;
@@ -119,29 +134,30 @@
             // 
             // textBoxNick
             // 
-            textBoxNick.Location = new Point(51, 201);
+            textBoxNick.Location = new Point(73, 335);
+            textBoxNick.Margin = new Padding(4, 5, 4, 5);
             textBoxNick.Name = "textBoxNick";
-            textBoxNick.Size = new Size(100, 23);
+            textBoxNick.Size = new Size(141, 31);
             textBoxNick.TabIndex = 6;
             // 
             // labelNick
             // 
             labelNick.AutoSize = true;
-            labelNick.Location = new Point(70, 171);
+            labelNick.Location = new Point(100, 285);
+            labelNick.Margin = new Padding(4, 0, 4, 0);
             labelNick.Name = "labelNick";
-            labelNick.Size = new Size(61, 15);
+            labelNick.Size = new Size(90, 25);
             labelNick.TabIndex = 5;
             labelNick.Text = "Nickname";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(582, 384);
+            ClientSize = new Size(831, 640);
             Controls.Add(panelMenu);
             Controls.Add(pictureBoxPlatform);
             Controls.Add(pictureBoxPlayer);
-            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
@@ -163,5 +179,6 @@
         private Button buttonAccept;
         private TextBox textBoxNick;
         private Label labelNick;
+        private ListBox listBoxHistory;
     }
 }

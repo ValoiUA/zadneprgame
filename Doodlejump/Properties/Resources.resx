@@ -169,4 +169,13 @@
   <data name="Casino_sound" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Casino.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="easybg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\easybg.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="hardbg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hardbg.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mediumbg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mediumbg.jpg;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
